@@ -1,0 +1,546 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>AP7</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+  <!-- Minified CSS -->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">   -->
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link type="text/css" rel="stylesheet" href="style1.css">
+
+  <script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1753341921646015',
+            xfbml      : true,
+            status     : true,
+            version    : 'v2.8'
+        });
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+
+
+</head>
+
+
+<body ng-app="dpApp" ng-controller="dpCtrl">
+  <style ng-bind-html-unsafe="style" class="ng-binding"></style>
+
+        <div class="container-fluid">
+          <div class = "row" style="background-color:#DCDCDC;">
+
+            <div class="col-sm-5 col-xs-12">
+                  <p></p>
+                  <p></p>
+                  <div style="color:#4169E1">FB Search</div>
+                  <p></p>
+                  <p></p>
+
+            </div>
+
+            <div class="col-sm-4 col-xs-8">
+                  <p></p>
+                  <p></p>
+                  <input type="text" size="14"  placeholder="type something.." ng-model="search" /><button style = "height:28px" class="btn btn-primary" ng-click="fun()" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                  <p></p>
+                  <p></p>
+
+            </div>
+            <div class="col-sm-3 col-xs-4 ">
+                  <p></p>
+                  <p></p>
+                  <button style="color:#4169E1;border:1px solid #4169E1" ng-click="clear()" class="btn btn-default" type="submit">Clear</button>
+                  <p></p>
+                  <p></p>
+
+
+            </div>
+
+          </div>
+      </div>
+
+
+
+
+
+          <div class="panel panel-default">
+
+
+
+                <div class="panel-body">
+
+                    <ul class="nav nav-pills nav-justified" ng-init="Tabis('user');style1={'background-color':'#3B5998'}">
+
+                        <li><a data-toggle="pill" ng-style="style1" ng-click="Tabis('user'); style1=style; style2=null;style3=null; style4=null;style5=null; style6=null">Users</a></li>
+                        <li><a data-toggle="pill"  ng-style="style2" ng-click=" Tabis('page'); style1=null; style2=style;style3=null; style4=null;style5=null; style6=null">Pages</a></li>
+                        <li><a data-toggle="pill" ng-style="style3" ng-click=" Tabis('event'); style1=null; style2=null;style3=style; style4=null;style5=null; style6=null">Events</a></li>
+                        <li><a data-toggle="pill" ng-style="style4" ng-click=" Tabis('place'); style1=null; style2=null;style3=null; style4=style;style5=null; style6=null">Places</a></li>
+                        <li><a data-toggle="pill" ng-style="style5" ng-click=" Tabis('group'); style1=null; style2=null;style3=null; style4=null;style5=style; style6=null">Groups</a></li>
+                        <li><a data-toggle="pill"ng-style="style6" ng-click=" Tabis('favorite'); style1=null; style2=null;style3=null; style4=null;style5=null; style6=style">Favorites</a></li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+
+
+
+    <div class="container">
+      <!--  <p>High_res : {{highresimg}}</p>
+        <p>High_res_url : {{high}}</p>
+        <p>res : {{res}}</p>
+        <p>Idchu: {{idchu}} </p>-->
+
+    <!--<div ng-animate="{enter: &#39;enter&#39;, leave: &#39;leave&#39;}" ng-switch on="par.selection">-->
+
+      <!-- <div ng-switch-when="settings">-->
+             <div class="row">
+
+                      <div class="progress" ng-hide ="prog">
+                          <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:50%"></div>
+                      </div>
+
+             </div>
+
+             <div class="row">
+               <div class="col-xs-12">
+                 <div class="table-responsive">
+
+                   <table class="table table-hover" ng-hide = "fav_disappear">
+
+                     <thead>
+                       <tr>
+                         <th>#</th>
+                         <th>Profile Photo</th>
+                         <th>Name</th>
+                         <th>Type</th>
+                         <th>Favorite</th>
+                         <th>Details</th>
+
+                       </tr>
+                     </thead>
+
+                     <tbody>
+                         <tr ng-repeat="user in fav_content" track by $index>
+                             <td> {{$index + 1}} </td>
+
+                             <td>
+
+                                   <a href= "{{user.dat[0].f_img}}" target="_blank" onClick="window.open("", '_blank');return false"><img ng-src= "{{user.dat[0].f_img}}" height= 40px; width= 30px; /></a>
+
+
+                             </td>
+                             <td> {{user.dat[0].f_name}} </td>
+                             <td> {{user.dat[0].f_tab}} </td>
+                             <td>
+
+                                   <button class="btn btn-icon" ng-click="trash_daba(user.dat[0].f_id,user.dat[0].f_name,user.dat[0].f_img)"><span class="glyphicon glyphicon-trash"></span></button>
+                             </td>
+                             <td>
+
+                                   <button class="btn btn-icon" ng-click="detail(user.dat[0].f_id,user.dat[0].f_name,user.dat[0].f_img)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                             </td>
+
+
+
+
+
+                         </tr>
+                     </tbody>
+
+                   </table>
+
+
+                       <table class="table table-hover" ng-hide = "dis1">
+
+                         <thead ng-hide = "dis1">
+                           <tr>
+                             <th>#</th>
+                             <th>Profile Photo</th>
+                             <th>Name</th>
+                             <th>Favorite</th>
+                             <th>Details</th>
+
+                           </tr>
+                         </thead>
+
+                         <tbody>
+                             <tr ng-repeat="user in content1" track by $index>
+                                 <td> {{$index + 1}} </td>
+                                 <td>
+                                     <div ng-repeat= "pic in user.picture">
+                                       <a href= "{{pic.url}}" target="_blank" onClick="window.open("", '_blank');return false"><img ng-src= "{{pic.url}}" height= 40px; width= 30px; /></a>
+                                     </div>
+
+                                 </td>
+                                 <td> {{user.name}} </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="star_daba(user.id,user.name,user.picture.data.url);trash_mate(user.id,user.name,user.picture.data.url);"><span id="{{user.id}}" class="glyphicon glyphicon-star-empty"></span></button>
+                                 </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="detail(user.id,user.name,user.picture.data.url)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                 </td>
+
+
+
+
+
+                             </tr>
+                         </tbody>
+
+                       </table>
+
+
+                       <table class="table table-hover" ng-hide = "dis2">
+
+                         <thead ng-hide = "dis2">
+                           <tr>
+                             <th>#</th>
+                             <th>Profile Photo</th>
+                             <th>Name</th>
+                             <th>Favorite</th>
+                             <th>Details</th>
+
+                           </tr>
+                         </thead>
+
+                         <tbody>
+                             <tr ng-repeat="user in content2" track by $index>
+                                 <td> {{$index + 1}} </td>
+                                 <td>
+                                     <div ng-repeat= "pic in user.picture">
+                                       <a href= "{{pic.url}}" target="_blank" onClick="window.open("", '_blank');return false"><img ng-src= "{{pic.url}}" height= 40px; width= 30px; /></a>
+                                     </div>
+
+                                 </td>
+                                 <td> {{user.name}} </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="star_daba(user.id,user.name,user.picture.data.url);trash_mate(user.id,user.name,user.picture.data.url);"><span id="{{user.id}}" class="glyphicon glyphicon-star-empty"></span></button>
+                                 </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="detail(user.id,user.name,user.picture.data.url)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                 </td>
+
+
+
+
+
+                             </tr>
+                         </tbody>
+
+                       </table>
+
+
+
+                       <table class="table table-hover" ng-hide = "dis3">
+
+                         <thead>
+                           <tr>
+                             <th>#</th>
+                             <th>Profile Photo</th>
+                             <th>Name</th>
+                             <th>Favorite</th>
+                             <th>Details</th>
+
+                           </tr>
+                         </thead>
+
+                         <tbody>
+                             <tr ng-repeat="user in content3" track by $index>
+                                 <td> {{$index + 1}} </td>
+                                 <td>
+                                     <div ng-repeat= "pic in user.picture">
+                                       <a href= "{{pic.url}}" target="_blank" onClick="window.open("", '_blank');return false"><img ng-src= "{{pic.url}}" height= 40px; width= 30px; /></a>
+                                     </div>
+
+                                 </td>
+                                 <td> {{user.name}} </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="star_daba(user.id,user.name,user.picture.data.url);trash_mate(user.id,user.name,user.picture.data.url);"><span id="{{user.id}}" class="glyphicon glyphicon-star-empty"></span></button>
+                                 </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="detail(user.id,user.name,user.picture.data.url)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                 </td>
+
+
+
+
+
+                             </tr>
+                         </tbody>
+
+                       </table>
+
+
+                       <table class="table table-hover" ng-hide = "dis4">
+
+                         <thead ng-hide = "dis4">
+                           <tr>
+                             <th>#</th>
+                             <th>Profile Photo</th>
+                             <th>Name</th>
+                             <th>Favorite</th>
+                             <th>Details</th>
+
+                           </tr>
+                         </thead>
+
+                         <tbody>
+                             <tr ng-repeat="user in content4" track by $index>
+                                 <td> {{$index + 1}} </td>
+                                 <td>
+                                     <div ng-repeat= "pic in user.picture">
+                                       <a href= "{{pic.url}}" target="_blank" onClick="window.open("", '_blank');return false"><img ng-src= "{{pic.url}}" height= 40px; width= 30px; /></a>
+                                     </div>
+
+                                 </td>
+                                 <td> {{user.name}} </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="star_daba(user.id,user.name,user.picture.data.url);trash_mate(user.id,user.name,user.picture.data.url);"><span id="{{user.id}}" class="glyphicon glyphicon-star-empty"></span></button>
+                                 </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="detail(user.id,user.name,user.picture.data.url)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                 </td>
+
+
+
+
+
+                             </tr>
+                         </tbody>
+
+                       </table>
+
+
+
+                       <table class="table table-hover" ng-hide = "dis5">
+
+                         <thead ng-hide = "dis5">
+                           <tr>
+                             <th>#</th>
+                             <th>Profile Photo</th>
+                             <th>Name</th>
+                             <th>Favorite</th>
+                             <th>Details</th>
+
+                           </tr>
+                         </thead>
+
+                         <tbody>
+                             <tr ng-repeat="user in content5" track by $index>
+                                 <td> {{$index + 1}} </td>
+                                 <td>
+                                     <div ng-repeat= "pic in user.picture">
+                                       <a href= "{{pic.url}}" target="_blank" onClick="window.open("", '_blank');return false"><img ng-src= "{{pic.url}}" height= 40px; width= 30px; /></a>
+                                     </div>
+
+                                 </td>
+                                 <td> {{user.name}} </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="star_daba(user.id,user.name,user.picture.data.url);trash_mate(user.id,user.name,user.picture.data.url);"><span id="{{user.id}}" class="glyphicon glyphicon-star-empty"></span></button>
+                                 </td>
+                                 <td>
+
+                                       <button class="btn btn-icon" ng-click="detail(user.id,user.name,user.picture.data.url)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                                 </td>
+
+
+
+
+
+                             </tr>
+                         </tbody>
+
+                       </table>
+
+
+
+                     </div>
+                   </div>
+               </div>
+
+               <div class = "row">
+                     <button class="btn btn-default" ng-click="prev(paginginfo.previous)" ng-hide = "disappear2">Previous</button>
+                     <button class="btn btn-default " ng-click="next(paginginfo.next)" ng-hide = "disappear1">Next</button>
+               </div>
+
+
+          </div>
+
+
+          <div class="container">
+
+                <div class="row">
+                  <button type="button" ng-click= "back()" ng-hide = "alb_dis" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
+                  <button type="button" class="btn btn-icon1" ng-click="fbpos(nameche,imgurl)" ng-hide = "alb_dis"><img ng-src= "http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" height= 20px; width= 30px; /></button>
+                   &nbsp;&nbsp;&nbsp;
+                   <button class="btn btn-icon2" ng-click="star_bijupage(idchu)" ng-hide = "alb_dis"><span id="babu" class="glyphicon glyphicon-star-empty"></span></button>
+
+                 </div>
+
+                <p></p>
+                <p></p>
+
+
+        <!--  <div ng-switch-when="home">-->
+
+                <div class="row">
+
+                  <div class = "col-lg-6">
+                    <div class="panel panel-default angular-animate" ng-hide="alb_dis">
+                           <div class="panel-heading">ALbums</div>
+                           <div class="panel-body">
+                              <div class="progress" ng-hide = "prog1">
+                                   <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:50%"></div>
+                              </div>
+
+                                <div style="background-color:#ffe4c4;height:40px;border:1px solid #ffdab9" ng-hide="no_alb">{{albu}}</div>
+
+                                <div ng-hide="che_alb">
+                                  <div class="panel-group" id="accordion">
+
+                                    <div ng-repeat="user in albums.data">
+
+
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                  <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#babu-{{$index}}">{{user.name}}</a>
+                                                  </h4>
+                                                </div>
+                                                <div id="babu-{{$index}}" class="panel-collapse collapse ">
+                                                  <div class="panel-body">
+
+                                                        <p><img src="https://graph.facebook.com/v2.8/{{user.photos.data[0].id}}/picture?access_token=EAAY6p7po1b8BAPqJZCGlIDzQhuZAkwmgZBTFhgfEKOEVOjAjIlxKTfFIHI8lJ1XvMFMP1T1Uxf70wMWZBmcXQwt3nYR60QCi0KrZC5fMjohU45rqfaeW37fvaGNZAYZCOpXj0ZB5h4L1cx4xEbjkY1HLBZCwC4JG12vEZD" width="100%" height="50%" /> </p>
+                                                          <p><img src="https://graph.facebook.com/v2.8/{{user.photos.data[1].id}}/picture?access_token=EAAY6p7po1b8BAPqJZCGlIDzQhuZAkwmgZBTFhgfEKOEVOjAjIlxKTfFIHI8lJ1XvMFMP1T1Uxf70wMWZBmcXQwt3nYR60QCi0KrZC5fMjohU45rqfaeW37fvaGNZAYZCOpXj0ZB5h4L1cx4xEbjkY1HLBZCwC4JG12vEZD" width="100%" height="50%" /> </p>
+                                                        <!--<img ng-init="high_res(pic.id)" ng-src= "{{res}}" height= 100px; width= 100px; />-->
+
+                                                  </div>
+                                               </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                      </div>
+
+
+
+                      <div class="col-lg-6">
+                        <div class="panel panel-default angular-animate" ng-hide="alb_dis">
+                                    <div class="panel-heading">Posts</div>
+                                    <div class="panel-body">
+                                      <div class="progress" ng-hide = "prog1">
+                                          <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:50%"></div>
+                                      </div>
+
+                                        <div style="background-color:#ffe4c4;height:40px;border:1px solid #ffdab9" ng-hide="no_pos">{{postu}}</div>
+
+                                      <div ng-hide="che_pos" ng-repeat="user in posts.data">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">{{user.name}}</div>
+                                            <div class="panel-body">
+                                              <div class="row">
+                                                   <div class="col-lg-1">
+                                                      <img ng-src= "{{imgurl}}" height= 40px; width= 30px; />
+                                                  </div>
+                                                   <div class = "col-lg-5">
+                                                      <div>  {{nameche}} </div>
+                                                      <div style="font-size: 12px;color: gray">{{user.created_time | date: "yyyy-mm-dd hh-mm-ss"}}</div>
+                                                    </div>
+                                              </div>
+                                              <p></p>
+                                              <div class="row">
+
+                                                  <div> {{user.message}} </div>
+                                                
+                                              </div>
+
+                                              </div>
+
+
+                                     </div>
+
+                                    </div>
+                                </div>
+                      </div>
+                  </div>
+            </div>
+
+          </div>
+
+
+
+
+
+
+
+  <!-- jQuery -->
+<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  <!-- Minified JavaScript
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  -->
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-animate.min.js"></script>
+
+
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!--<script src = "js/script.js"></script>-->
+  <script src = "VP3_cont.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+
+</html>
